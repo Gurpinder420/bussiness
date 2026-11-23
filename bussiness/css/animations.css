@@ -1,0 +1,230 @@
+/* =============================================================
+   SARVAGUN NATURALS - animation layer
+   Only transform + opacity are animated (60fps friendly).
+   Everything here is disabled under prefers-reduced-motion.
+   ============================================================= */
+
+/* ---------- keyframes ---------- */
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes pageOut {
+  from { opacity: 1; transform: none; }
+  to   { opacity: 0; transform: translateY(-8px); }
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(26px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+@keyframes floatY {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-12px); }
+}
+@keyframes floatSoft {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50%      { transform: translate3d(0, -8px, 0); }
+}
+@keyframes shineSweep {
+  from { transform: translateX(-120%) skewX(-18deg); }
+  to   { transform: translateX(320%) skewX(-18deg); }
+}
+@keyframes badgePop {
+  0%   { transform: scale(1); }
+  35%  { transform: scale(1.45); }
+  60%  { transform: scale(.92); }
+  100% { transform: scale(1); }
+}
+@keyframes drawerIn {
+  from { transform: translateX(102%); }
+  to   { transform: translateX(0); }
+}
+@keyframes lineIn {
+  from { opacity: 0; transform: translateX(18px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(14px) scale(.97); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes toastOut {
+  from { opacity: 1; transform: none; }
+  to   { opacity: 0; transform: translateY(8px) scale(.97); }
+}
+@keyframes spinIn {
+  from { transform: rotate(-8deg) scale(.9); opacity: .4; }
+  to   { transform: none; opacity: 1; }
+}
+@keyframes pulseRing {
+  0%   { transform: scale(.9); opacity: .55; }
+  70%  { transform: scale(1.5); opacity: 0; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+
+/* ---------- page transitions ---------- */
+html.js main { animation: pageIn .55s var(--ease-out) both; }
+main.is-leaving { animation: pageOut .28s var(--ease) forwards; }
+
+/* ---------- hero entrance (orchestrated, staggered) ---------- */
+.hero__badge,
+.hero h1,
+.hero__sub,
+.hero__cta,
+.hero__meta,
+.hero__media {
+  animation: fadeUp .85s var(--ease-out) both;
+}
+.hero__badge { animation-delay: .05s; }
+.hero h1    { animation-delay: .16s; }
+.hero__sub  { animation-delay: .3s; }
+.hero__cta  { animation-delay: .42s; }
+.hero__meta { animation-delay: .54s; }
+.hero__media{ animation-delay: .26s; animation-name: fadeInUpMedia; }
+@keyframes fadeInUpMedia {
+  from { opacity: 0; transform: translateY(26px) scale(.985); }
+  to   { opacity: 1; transform: none; }
+}
+.hero__float { animation: floatSoft 7s ease-in-out infinite; }
+.hero__float--b { animation-delay: -3.5s; }
+
+/* ---------- scroll reveals ---------- */
+html.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity .7s var(--ease-out), transform .7s var(--ease-out);
+  will-change: opacity, transform;
+}
+html.js [data-reveal].is-visible { opacity: 1; transform: none; }
+/* stagger helper: data-delay="1..6" */
+html.js [data-reveal][data-delay="1"] { transition-delay: .08s; }
+html.js [data-reveal][data-delay="2"] { transition-delay: .16s; }
+html.js [data-reveal][data-delay="3"] { transition-delay: .24s; }
+html.js [data-reveal][data-delay="4"] { transition-delay: .32s; }
+html.js [data-reveal][data-delay="5"] { transition-delay: .4s; }
+html.js [data-reveal][data-delay="6"] { transition-delay: .48s; }
+
+/* ---------- announcement marquee ---------- */
+.announce__track { animation: marquee 34s linear infinite; }
+.announce:hover .announce__track,
+.announce:focus-within .announce__track { animation-play-state: paused; }
+
+/* ---------- hover: gold underline ---------- */
+.primary-nav a::after,
+.footer__col a::after,
+.footer__bottom a::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: -2px;
+  height: 1px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .35s var(--ease);
+}
+.primary-nav a { position: relative; }
+.footer__col a, .footer__bottom a { position: relative; }
+.primary-nav a:hover::after,
+.primary-nav a[aria-current="page"]::after,
+.footer__col a:hover::after,
+.footer__bottom a:hover::after { transform: scaleX(1); }
+
+/* ---------- button shine sweep ---------- */
+.btn--primary::before,
+.btn--gold::before,
+.btn--light::before {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0; left: 0;
+  width: 45%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .38), transparent);
+  transform: translateX(-120%) skewX(-18deg);
+  pointer-events: none;
+}
+.btn--primary:hover::before,
+.btn--gold:hover::before,
+.btn--light:hover::before { animation: shineSweep .9s var(--ease) forwards; }
+.btn > * { position: relative; z-index: 1; }
+
+/* ---------- cart badge bounce ---------- */
+.badge-count.is-bumping { animation: badgePop .5s var(--ease); }
+
+/* ---------- cart drawer contents ---------- */
+.cart-drawer.is-open .line-item { animation: lineIn .4s var(--ease-out) both; }
+.cart-drawer.is-open .line-item:nth-child(1) { animation-delay: .06s; }
+.cart-drawer.is-open .line-item:nth-child(2) { animation-delay: .11s; }
+.cart-drawer.is-open .line-item:nth-child(3) { animation-delay: .16s; }
+.cart-drawer.is-open .line-item:nth-child(4) { animation-delay: .21s; }
+.cart-drawer.is-open .line-item:nth-child(n+5) { animation-delay: .26s; }
+.line-item__img { animation: spinIn .5s var(--ease-out) both; }
+
+/* ---------- toasts ---------- */
+.toast { animation: toastIn .32s var(--ease-out) both; }
+.toast.is-out { animation: toastOut .28s var(--ease) forwards; }
+
+/* ---------- fly to cart ---------- */
+.fly-img {
+  position: fixed;
+  z-index: 130;
+  border-radius: 12px;
+  object-fit: cover;
+  pointer-events: none;
+  box-shadow: var(--shadow-md);
+  will-change: transform, opacity;
+  transition: transform .8s cubic-bezier(.5, -.2, .75, .4), opacity .8s ease-in;
+}
+.cart-pulse::after {
+  content: "";
+  position: absolute; inset: 4px;
+  border-radius: 50%;
+  border: 2px solid var(--gold);
+  animation: pulseRing .8s var(--ease-out) 1;
+  pointer-events: none;
+}
+
+/* ---------- image blur-up ---------- */
+html.js img.blur-up {
+  filter: blur(12px);
+  transform: scale(1.02);
+  transition: filter .6s var(--ease), transform .6s var(--ease);
+}
+html.js img.blur-up.is-loaded { filter: none; transform: none; }
+
+/* ---------- count-up number emphasis ---------- */
+[data-count].is-counted { animation: fadeIn .5s var(--ease) both; }
+
+/* ---------- section reveal niceties ---------- */
+html.js .cat-tile { transition: transform .45s var(--ease), box-shadow .45s var(--ease); }
+html.js .cat-tile:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); }
+html.js .info-card { transition: transform .35s var(--ease), box-shadow .35s var(--ease); }
+html.js .info-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-sm); }
+
+/* hero frame gentle parallax handle (JS sets --py) */
+.hero__frame { transform: translate3d(0, var(--py, 0px), 0); transition: transform .2s linear; }
+
+/* ---------- reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+    scroll-behavior: auto !important;
+  }
+  html.js [data-reveal],
+  .hero__badge, .hero h1, .hero__sub, .hero__cta, .hero__meta, .hero__media {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  html.js img.blur-up { filter: none !important; transform: none !important; }
+  .announce__track { animation: none !important; flex-wrap: wrap; width: auto; justify-content: center; white-space: normal; }
+  .fly-img { display: none !important; }
+  .hero__frame { transform: none !important; }
+}

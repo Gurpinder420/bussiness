@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://sarvagunnaturals.example/sitemap.xml
+# Replace the placeholder domain above and in every canonical tag before launch.
